@@ -41,6 +41,7 @@
 #include <SFCGAL/detail/io/Serialization.h>
 
 #include <SFCGAL/algorithm/isValid.h>
+#include <SFCGAL/algorithm/contains.h>
 #include <SFCGAL/algorithm/intersects.h>
 #include <SFCGAL/algorithm/intersection.h>
 #include <SFCGAL/algorithm/difference.h>
@@ -153,10 +154,10 @@ extern "C" sfcgal_geometry_type_t sfcgal_geometry_type_id( const sfcgal_geometry
     }
 }
 
-extern "C" int sfcgal_geometry_is_valid( const sfcgal_geometry_t* geom )
+extern "C" int sfcgal_geometry_is_valid( const sfcgal_geometry_t* geom,  double tolerance)
 {
     SFCGAL_GEOMETRY_CONVERT_CATCH_TO_ERROR(
-        return ( int )bool( SFCGAL::algorithm::isValid( *reinterpret_cast<const SFCGAL::Geometry*>( geom ) ) );
+        return ( int )bool( SFCGAL::algorithm::isValid( *reinterpret_cast<const SFCGAL::Geometry*>( geom ), tolerance ) );
     )
 }
 
@@ -676,8 +677,25 @@ extern "C" sfcgal_prepared_geometry_t* sfcgal_io_read_ewkt( const char* str, siz
 SFCGAL_GEOMETRY_FUNCTION_BINARY_PREDICATE( intersects, SFCGAL::algorithm::intersects )
 SFCGAL_GEOMETRY_FUNCTION_BINARY_PREDICATE( intersects_3d, SFCGAL::algorithm::intersects3D )
 
+// HDEEKEN's CUSTOM OPERATORS START
+//SFCGAL_GEOMETRY_FUNCTION_BINARY_PREDICATE( contains, SFCGAL::algorithm::contains )
+SFCGAL_GEOMETRY_FUNCTION_BINARY_PREDICATE( contains_3d, SFCGAL::algorithm::contains3D )
+
+/*extern "C" int sfcgal_geometry_contains_3d( const sfcgal_geometry_t* ga, const sfcgal_geometry_t* gb )
+{
+  const SFCGAL::Geometry* g = reinterpret_cast<const SFCGAL::Geometry*>( ga );
+
+  if ( g->geometryTypeId() != SFCGAL::TYPE_POLYHEDRALSURFACE ) {
+      SFCGAL_ERROR( "sfcgal_geometry_contains_3d only applies to polyhedral surfaces" );
+      return 0;
+  }
+  return ( int ) bool( SFCGAL::algorithm::contains3D(  *(const SFCGAL::Geometry*)(ga), *(const SFCGAL::Geometry*)(gb) ) );
+  
+}*/
+// HDEEKEN's CUSTOM OPERATORS END
+
 #define SFCGAL_GEOMETRY_FUNCTION_BINARY_MEASURE( name, sfcgal_function ) \
-	SFCGAL_GEOMETRY_FUNCTION_BINARY_SCALAR( name, sfcgal_function, double, double, -1.0 )
+SFCGAL_GEOMETRY_FUNCTION_BINARY_SCALAR( name, sfcgal_function, double, double, -1.0 )
 
 SFCGAL_GEOMETRY_FUNCTION_BINARY_MEASURE( distance, SFCGAL::algorithm::distance )
 SFCGAL_GEOMETRY_FUNCTION_BINARY_MEASURE( distance_3d, SFCGAL::algorithm::distance3D )

@@ -95,7 +95,7 @@ SFCGAL_API sfcgal_geometry_type_t    sfcgal_geometry_type_id( const sfcgal_geome
  * Tests if the given geometry is valid or not
  * @ingroup capi
  */
-SFCGAL_API int                       sfcgal_geometry_is_valid( const sfcgal_geometry_t* );
+SFCGAL_API int                       sfcgal_geometry_is_valid( const sfcgal_geometry_t*, double tolerance);
 
 /**
  * Tests if the given geometry is 3D or not
@@ -566,6 +566,19 @@ SFCGAL_API sfcgal_prepared_geometry_t* sfcgal_io_read_binary_prepared( const cha
  * Spatial processing
  *
  *--------------------------------------------------------------------------------------*/
+
+/// HDEEKEN's CUSTOM SFCGAL OPERATORS START
+
+//SFCGAL_API int                         sfcgal_geometry_contains( const sfcgal_geometry_t* geom1, const sfcgal_geometry_t* geom2 );
+/**
+ * Tests the 3D containment of geom1 and geom2
+ * @pre isValid(geom1) == true
+ * @pre isValid(geom2) == true
+ * @ingroup capi
+ */
+SFCGAL_API int                         sfcgal_geometry_contains_3d( const sfcgal_geometry_t* geom1, const sfcgal_geometry_t* geom2 );
+
+/// HDEEKEN's CUSTOM SFCGAL OPERATORS END
 
 /**
  * Tests the intersection of geom1 and geom2
